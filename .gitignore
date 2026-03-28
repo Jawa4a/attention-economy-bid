@@ -1,0 +1,10 @@
+# IntelliJ / Java
+out/
+.idea/
+*.iml
+*.class
+*.jar
+
+# Logs
+*.log
+
