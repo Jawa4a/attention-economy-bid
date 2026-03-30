@@ -17,6 +17,82 @@ public final class BotState {
     private long currentBlockSpent;
     private int summariesSeen;
 
+    public int getInitialBudget() {
+        return initialBudget;
+    }
+
+    public void setRemainingBudget(int remainingBudget) {
+        this.remainingBudget = remainingBudget;
+    }
+
+    public void setRoundNumber(int roundNumber) {
+        this.roundNumber = roundNumber;
+    }
+
+    public int getWins() {
+        return wins;
+    }
+
+    public void setWins(int wins) {
+        this.wins = wins;
+    }
+
+    public int getLosses() {
+        return losses;
+    }
+
+    public void setLosses(int losses) {
+        this.losses = losses;
+    }
+
+    public long getTotalSpent() {
+        return totalSpent;
+    }
+
+    public void setTotalSpent(long totalSpent) {
+        this.totalSpent = totalSpent;
+    }
+
+    public long getTotalSummaryPoints() {
+        return totalSummaryPoints;
+    }
+
+    public void setTotalSummaryPoints(long totalSummaryPoints) {
+        this.totalSummaryPoints = totalSummaryPoints;
+    }
+
+    public long getCurrentBlockPoints() {
+        return currentBlockPoints;
+    }
+
+    public void setCurrentBlockPoints(long currentBlockPoints) {
+        this.currentBlockPoints = currentBlockPoints;
+    }
+
+    public long getCurrentBlockSpent() {
+        return currentBlockSpent;
+    }
+
+    public void setCurrentBlockSpent(long currentBlockSpent) {
+        this.currentBlockSpent = currentBlockSpent;
+    }
+
+    public int getSummariesSeen() {
+        return summariesSeen;
+    }
+
+    public void setSummariesSeen(int summariesSeen) {
+        this.summariesSeen = summariesSeen;
+    }
+
+    public void setAggressionMultiplier(double aggressionMultiplier) {
+        this.aggressionMultiplier = aggressionMultiplier;
+    }
+
+    public String getLastAuctionCategory() {
+        return lastAuctionCategory;
+    }
+
     private double aggressionMultiplier;
     private double lastEfficiency;
     private String lastAuctionCategory;
@@ -103,5 +179,13 @@ public final class BotState {
         } else if (this.aggressionMultiplier > 2.25) {
             this.aggressionMultiplier = 2.25;
         }
+    }
+
+    public double getLastEfficiency() {
+        return lastEfficiency;
+    }
+
+    public void setLastEfficiency(double lastEfficiency) {
+        this.lastEfficiency = lastEfficiency;
     }
 }
