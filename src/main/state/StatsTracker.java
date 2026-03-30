@@ -18,6 +18,11 @@ public final class StatsTracker {
     private int secondInterestMatches;
     private int thirdInterestMatches;
 
+    private int recentWins = 0;
+    private int recentLosses = 0;
+    private int roundsInWindow = 0;
+    private static final int WINDOW_SIZE = 100;
+
     private double averageEfficiency;
     private int efficiencySamples;
 
@@ -81,5 +86,35 @@ public final class StatsTracker {
 
     public int getSeenCountForVideoCategory(String category) {
         return seenVideoCategories.getOrDefault(category, 0);
+    }
+
+    public double getRecentWinRate() {
+        int total = recentWins + recentLosses;
+        if (total < 10) return 0.5;
+        return (double) recentWins / total;
+    }
+
+    public void recordWin() {
+        recentWins++;
+        roundsInWindow++;
+        resetIfNeeded();
+    }
+
+    public void recordLoss() {
+        recentLosses++;
+        roundsInWindow++;
+        resetIfNeeded();
+    }
+
+    private void resetIfNeeded() {
+        if (roundsInWindow >= WINDOW_SIZE) {
+            recentWins = 0;
+            recentLosses = 0;
+            roundsInWindow = 0;
+        }
+    }
+
+    public int getRecentWins() {
+        return recentWins;
     }
 }

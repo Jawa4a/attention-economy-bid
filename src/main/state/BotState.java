@@ -87,6 +87,7 @@ public final class BotState {
 
     public void setAggressionMultiplier(double aggressionMultiplier) {
         this.aggressionMultiplier = aggressionMultiplier;
+        clampAggression();
     }
 
     public String getLastAuctionCategory() {

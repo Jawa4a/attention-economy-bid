@@ -1,8 +1,8 @@
 package main.dataModel;
 
 public class AuctionInput {
-    Video video;
-    Viewer viewer;
+    private final Video video;
+    private final Viewer viewer;
 
     public AuctionInput(Video video, Viewer viewer) {
         this.video = video;

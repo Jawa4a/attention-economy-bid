@@ -28,7 +28,7 @@ void main() throws Exception {
     ProcessBuilder pb = new ProcessBuilder(
             "java",
             "-cp",
-            "out/production/TaskPvP",
+            "out/production/attention-economy-bid",
             "Main",
             "10000000" // 10_000_000
     );

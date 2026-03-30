@@ -1,9 +1,9 @@
 package main.dataModel;
 
 public class Video {
-    String category;
-    long viewCount;
-    long commentCount;
+    private final String category;
+    private final long viewCount;
+    private final long commentCount;
 
     public Video(String category, long viewCount, long commentCount) {
         this.category = category;

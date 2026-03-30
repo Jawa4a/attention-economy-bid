@@ -1,8 +1,8 @@
 package main.dataModel;
 
-public final class Bid {
-    int startBid;
-    int maxBid;
+public class Bid {
+    private final int startBid;
+    private final int maxBid;
 
     public Bid(int startBid, int maxBid) {
         this.startBid = startBid;

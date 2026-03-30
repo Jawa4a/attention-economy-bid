@@ -54,7 +54,8 @@ public final class ValueEstimator {
             score += 0.5;
         }
 
-        if (stats.getSeenCountForVideoCategory(video.getCategory()) > 0 && chosenCategory.equals(video.getCategory())) {
+        if (stats.getSeenCountForVideoCategory(video.getCategory()) > 5
+                && chosenCategory.equals(video.getCategory())) {
             score += 0.25;
         }
 

@@ -1,8 +1,8 @@
 package main.dataModel;
 
 public class Summary {
-    long points;
-    long spent;
+    private final long points;
+    private final long spent;
 
     public Summary(long points, long spent) {
         this.points = points;

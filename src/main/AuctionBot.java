@@ -34,7 +34,8 @@ public final class AuctionBot {
         this.statsTracker = new StatsTracker();
         this.budgetManager = new BudgetManager(state);
         this.valueEstimator = new ValueEstimator();
-        this.bidStrategy = new BidStrategy(valueEstimator, budgetManager);
+//        this.bidStrategy = new BidStrategy(valueEstimator, budgetManager);
+        this.bidStrategy = new BidStrategy(valueEstimator, budgetManager, initialBudget);
     }
 
     public void run() throws IOException {
@@ -93,39 +94,37 @@ public final class AuctionBot {
 
         state.incrementRound();
         state.setLastAuctionCategory(input.getVideo().getCategory());
-        statsTracker.recordAuction(input, state.getChosenCategory());
 
         Bid bid = bidStrategy.decideBid(input, state, statsTracker);
 
-        int startBid = Math.max(0, bid.getStartBid());
-        int maxBid = Math.max(0, bid.getMaxBid());
+        statsTracker.recordAuction(input, state.getChosenCategory());
 
-        if (startBid > maxBid) {
-            startBid = maxBid;
-        }
-
-        if (maxBid > state.getRemainingBudget()) {
-            maxBid = state.getRemainingBudget();
-        }
-
-        if (startBid > maxBid) {
-            startBid = maxBid;
-        }
-
-        out.println(startBid + " " + maxBid);
+        Bid safeBid = budgetManager.clampToBudget(bid);
+        out.println(safeBid.getStartBid() + " " + safeBid.getMaxBid());
     }
 
     private void handleWinLine(String line) {
         int cost = parser.parseWinCost(line);
         state.recordWin(cost);
+        statsTracker.recordWin();
     }
 
     private void handleLossLine() {
         state.recordLoss();
+        statsTracker.recordLoss();
     }
+
+//    private void handleSummaryLine(String line) {
+//        Summary summary = parser.parseSummaryLine(line);
+//        statsTracker.applySummary(summary, state);
+//    }
 
     private void handleSummaryLine(String line) {
         Summary summary = parser.parseSummaryLine(line);
         statsTracker.applySummary(summary, state);
+        bidStrategy.applySummary(
+                summary.getPoints(),
+                summary.getSpent(),
+                statsTracker.getRecentWins());
     }
 }

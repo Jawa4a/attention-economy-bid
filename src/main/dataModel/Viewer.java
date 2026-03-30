@@ -1,10 +1,10 @@
 package main.dataModel;
 
 public class Viewer {
-    boolean subscribed;
-    String age;
-    String gender;
-    String[] interests;
+    private final boolean subscribed;
+    private final String age;
+    private final String gender;
+    private final String[] interests;
 
     public Viewer(boolean subscribed, String age, String gender, String[] interests) {
         this.subscribed = subscribed;
@@ -23,5 +23,9 @@ public class Viewer {
 
     public String[] getInterests() {
         return interests;
+    }
+
+    public String getGender() {
+        return gender;
     }
 }
