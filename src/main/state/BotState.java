@@ -1,192 +1,184 @@
 package main.state;
 
 public final class BotState {
+   private final int initialBudget;
+   private final String chosenCategory;
+   private int remainingBudget;
+   private int roundNumber;
+   private int wins;
+   private int losses;
+   private long totalSpent;
+   private long totalSummaryPoints;
+   private long currentBlockPoints;
+   private long currentBlockSpent;
+   private int summariesSeen;
+   private double aggressionMultiplier;
+   private double lastEfficiency;
+   private String lastAuctionCategory;
 
-    private final int initialBudget;
-    private final String chosenCategory;
+   public int getInitialBudget() {
+      return this.initialBudget;
+   }
 
-    private int remainingBudget;
-    private int roundNumber;
-    private int wins;
-    private int losses;
+   public void setRemainingBudget(int remainingBudget) {
+      this.remainingBudget = remainingBudget;
+   }
 
-    private long totalSpent;
-    private long totalSummaryPoints;
+   public void setRoundNumber(int roundNumber) {
+      this.roundNumber = roundNumber;
+   }
 
-    private long currentBlockPoints;
-    private long currentBlockSpent;
-    private int summariesSeen;
+   public int getWins() {
+      return this.wins;
+   }
 
-    public int getInitialBudget() {
-        return initialBudget;
-    }
+   public void setWins(int wins) {
+      this.wins = wins;
+   }
 
-    public void setRemainingBudget(int remainingBudget) {
-        this.remainingBudget = remainingBudget;
-    }
+   public int getLosses() {
+      return this.losses;
+   }
 
-    public void setRoundNumber(int roundNumber) {
-        this.roundNumber = roundNumber;
-    }
+   public void setLosses(int losses) {
+      this.losses = losses;
+   }
 
-    public int getWins() {
-        return wins;
-    }
+   public long getTotalSpent() {
+      return this.totalSpent;
+   }
 
-    public void setWins(int wins) {
-        this.wins = wins;
-    }
+   public void setTotalSpent(long totalSpent) {
+      this.totalSpent = totalSpent;
+   }
 
-    public int getLosses() {
-        return losses;
-    }
+   public long getTotalSummaryPoints() {
+      return this.totalSummaryPoints;
+   }
 
-    public void setLosses(int losses) {
-        this.losses = losses;
-    }
+   public void setTotalSummaryPoints(long totalSummaryPoints) {
+      this.totalSummaryPoints = totalSummaryPoints;
+   }
 
-    public long getTotalSpent() {
-        return totalSpent;
-    }
+   public long getCurrentBlockPoints() {
+      return this.currentBlockPoints;
+   }
 
-    public void setTotalSpent(long totalSpent) {
-        this.totalSpent = totalSpent;
-    }
+   public void setCurrentBlockPoints(long currentBlockPoints) {
+      this.currentBlockPoints = currentBlockPoints;
+   }
 
-    public long getTotalSummaryPoints() {
-        return totalSummaryPoints;
-    }
+   public long getCurrentBlockSpent() {
+      return this.currentBlockSpent;
+   }
 
-    public void setTotalSummaryPoints(long totalSummaryPoints) {
-        this.totalSummaryPoints = totalSummaryPoints;
-    }
+   public void setCurrentBlockSpent(long currentBlockSpent) {
+      this.currentBlockSpent = currentBlockSpent;
+   }
 
-    public long getCurrentBlockPoints() {
-        return currentBlockPoints;
-    }
+   public int getSummariesSeen() {
+      return this.summariesSeen;
+   }
 
-    public void setCurrentBlockPoints(long currentBlockPoints) {
-        this.currentBlockPoints = currentBlockPoints;
-    }
+   public void setSummariesSeen(int summariesSeen) {
+      this.summariesSeen = summariesSeen;
+   }
 
-    public long getCurrentBlockSpent() {
-        return currentBlockSpent;
-    }
+   public void setAggressionMultiplier(double aggressionMultiplier) {
+      this.aggressionMultiplier = aggressionMultiplier;
+      this.clampAggression();
+   }
 
-    public void setCurrentBlockSpent(long currentBlockSpent) {
-        this.currentBlockSpent = currentBlockSpent;
-    }
+   public String getLastAuctionCategory() {
+      return this.lastAuctionCategory;
+   }
 
-    public int getSummariesSeen() {
-        return summariesSeen;
-    }
+   public BotState(int initialBudget, String chosenCategory) {
+      if (initialBudget < 0) {
+         throw new IllegalArgumentException("Initial budget cannot be negative.");
+      } else if (chosenCategory != null && !chosenCategory.isBlank()) {
+         this.initialBudget = initialBudget;
+         this.chosenCategory = chosenCategory;
+         this.remainingBudget = initialBudget;
+         this.aggressionMultiplier = 1.0D;
+         this.lastEfficiency = 0.0D;
+         this.lastAuctionCategory = "";
+      } else {
+         throw new IllegalArgumentException("Chosen category cannot be blank.");
+      }
+   }
 
-    public void setSummariesSeen(int summariesSeen) {
-        this.summariesSeen = summariesSeen;
-    }
+   public String getChosenCategory() {
+      return this.chosenCategory;
+   }
 
-    public void setAggressionMultiplier(double aggressionMultiplier) {
-        this.aggressionMultiplier = aggressionMultiplier;
-        clampAggression();
-    }
+   public int getRemainingBudget() {
+      return this.remainingBudget;
+   }
 
-    public String getLastAuctionCategory() {
-        return lastAuctionCategory;
-    }
+   public int getRoundNumber() {
+      return this.roundNumber;
+   }
 
-    private double aggressionMultiplier;
-    private double lastEfficiency;
-    private String lastAuctionCategory;
+   public double getAggressionMultiplier() {
+      return this.aggressionMultiplier;
+   }
 
-    public BotState(int initialBudget, String chosenCategory) {
-        if (initialBudget < 0) {
-            throw new IllegalArgumentException("Initial budget cannot be negative.");
-        }
-        if (chosenCategory == null || chosenCategory.isBlank()) {
-            throw new IllegalArgumentException("Chosen category cannot be blank.");
-        }
+   public void setLastAuctionCategory(String lastAuctionCategory) {
+      this.lastAuctionCategory = lastAuctionCategory == null ? "" : lastAuctionCategory;
+   }
 
-        this.initialBudget = initialBudget;
-        this.chosenCategory = chosenCategory;
-        this.remainingBudget = initialBudget;
-        this.aggressionMultiplier = 1.0;
-        this.lastEfficiency = 0.0;
-        this.lastAuctionCategory = "";
-    }
+   public void incrementRound() {
+      ++this.roundNumber;
+   }
 
-    public String getChosenCategory() {
-        return chosenCategory;
-    }
+   public void recordWin(int cost) {
+      int safeCost = Math.max(0, cost);
+      ++this.wins;
+      this.remainingBudget = Math.max(0, this.remainingBudget - safeCost);
+      this.totalSpent += (long)safeCost;
+   }
 
-    public int getRemainingBudget() {
-        return remainingBudget;
-    }
+   public void recordLoss() {
+      ++this.losses;
+   }
 
-    public int getRoundNumber() {
-        return roundNumber;
-    }
+   public void applySummary(long points, long spent) {
+      this.currentBlockPoints = Math.max(0L, points);
+      this.currentBlockSpent = Math.max(0L, spent);
+      this.totalSummaryPoints += this.currentBlockPoints;
+      ++this.summariesSeen;
+      if (this.currentBlockSpent > 0L) {
+         this.lastEfficiency = (double)this.currentBlockPoints / (double)this.currentBlockSpent;
+      } else {
+         this.lastEfficiency = 0.0D;
+      }
 
-    public double getAggressionMultiplier() {
-        return aggressionMultiplier;
-    }
+   }
 
-    public void setLastAuctionCategory(String lastAuctionCategory) {
-        this.lastAuctionCategory = lastAuctionCategory == null ? "" : lastAuctionCategory;
-    }
+   public void multiplyAggression(double factor) {
+      this.aggressionMultiplier *= factor;
+      this.clampAggression();
+   }
 
-    public void incrementRound() {
-        this.roundNumber++;
-    }
+   public double getSpentRatio() {
+      return this.initialBudget == 0 ? 1.0D : (double)(this.initialBudget - this.remainingBudget) / (double)this.initialBudget;
+   }
 
-    public void recordWin(int cost) {
-        int safeCost = Math.max(0, cost);
-        this.wins++;
-        this.remainingBudget = Math.max(0, this.remainingBudget - safeCost);
-        this.totalSpent += safeCost;
-    }
+   private void clampAggression() {
+      if (this.aggressionMultiplier < 0.5D) {
+         this.aggressionMultiplier = 0.5D;
+      } else if (this.aggressionMultiplier > 2.25D) {
+         this.aggressionMultiplier = 2.25D;
+      }
 
-    public void recordLoss() {
-        this.losses++;
-    }
+   }
 
-    public void applySummary(long points, long spent) {
-        this.currentBlockPoints = Math.max(0L, points);
-        this.currentBlockSpent = Math.max(0L, spent);
-        this.totalSummaryPoints += this.currentBlockPoints;
-        this.summariesSeen++;
+   public double getLastEfficiency() {
+      return this.lastEfficiency;
+   }
 
-        if (this.currentBlockSpent > 0) {
-            this.lastEfficiency = (double) this.currentBlockPoints / this.currentBlockSpent;
-        } else {
-            this.lastEfficiency = 0.0;
-        }
-    }
-
-    public void multiplyAggression(double factor) {
-        this.aggressionMultiplier *= factor;
-        clampAggression();
-    }
-
-    public double getSpentRatio() {
-        if (initialBudget == 0) {
-            return 1.0;
-        }
-        return (double) (initialBudget - remainingBudget) / initialBudget;
-    }
-
-    private void clampAggression() {
-        if (this.aggressionMultiplier < 0.50) {
-            this.aggressionMultiplier = 0.50;
-        } else if (this.aggressionMultiplier > 2.25) {
-            this.aggressionMultiplier = 2.25;
-        }
-    }
-
-    public double getLastEfficiency() {
-        return lastEfficiency;
-    }
-
-    public void setLastEfficiency(double lastEfficiency) {
-        this.lastEfficiency = lastEfficiency;
-    }
+   public void setLastEfficiency(double lastEfficiency) {
+      this.lastEfficiency = lastEfficiency;
+   }
 }

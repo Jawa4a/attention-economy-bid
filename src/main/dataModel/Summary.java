@@ -1,19 +1,19 @@
 package main.dataModel;
 
 public class Summary {
-    private final long points;
-    private final long spent;
+   private final long points;
+   private final long spent;
 
-    public Summary(long points, long spent) {
-        this.points = points;
-        this.spent = spent;
-    }
+   public Summary(long points, long spent) {
+      this.points = points;
+      this.spent = spent;
+   }
 
-    public long getPoints() {
-        return points;
-    }
+   public long getPoints() {
+      return this.points;
+   }
 
-    public long getSpent() {
-        return spent;
-    }
+   public long getSpent() {
+      return this.spent;
+   }
 }
