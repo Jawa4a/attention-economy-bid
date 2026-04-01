@@ -6,11 +6,11 @@ public class Viewer {
    private final String gender;
    private final String[] interests;
 
-   public Viewer(boolean subscribed, String age, String gender, String[] interests) {
-      this.subscribed = subscribed;
-      this.age = age;
-      this.gender = gender;
-      this.interests = interests;
+   public Viewer(boolean var1, String var2, String var3, String[] var4) {
+      this.subscribed = var1;
+      this.age = var2;
+      this.gender = var3;
+      this.interests = var4;
    }
 
    public boolean isSubscribed() {

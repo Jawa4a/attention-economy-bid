@@ -20,31 +20,36 @@ public final class StatsTracker {
    private static final int WINDOW_SIZE = 100;
    private double averageEfficiency;
    private int efficiencySamples;
+   double avgWinCost = (double)8.0F;
+   int winSamples = 0;
 
-   public void recordAuction(AuctionInput input, String chosenCategory) {
-      if (input != null) {
+   public StatsTracker() {
+   }
+
+   public void recordAuction(AuctionInput var1, String var2) {
+      if (var1 != null) {
          ++this.auctionsSeen;
-         String videoCategory = input.getVideo().getCategory();
-         this.seenVideoCategories.merge(videoCategory, 1, Integer::sum);
-         if (input.getViewer().isSubscribed()) {
+         String var3 = var1.getVideo().getCategory();
+         this.seenVideoCategories.merge(var3, 1, Integer::sum);
+         if (var1.getViewer().isSubscribed()) {
             ++this.subscribedViewersSeen;
          }
 
-         if (chosenCategory.equals(videoCategory)) {
+         if (var2.equals(var3)) {
             ++this.matchedVideoCategorySeen;
          }
 
-         String[] interests = input.getViewer().getInterests();
+         String[] var4 = var1.getViewer().getInterests();
 
-         for(int i = 0; i < interests.length; ++i) {
-            String interest = interests[i];
-            this.seenInterestHits.merge(interest, 1, Integer::sum);
-            if (chosenCategory.equals(interest)) {
-               if (i == 0) {
+         for(int var5 = 0; var5 < var4.length; ++var5) {
+            String var6 = var4[var5];
+            this.seenInterestHits.merge(var6, 1, Integer::sum);
+            if (var2.equals(var6)) {
+               if (var5 == 0) {
                   ++this.firstInterestMatches;
-               } else if (i == 1) {
+               } else if (var5 == 1) {
                   ++this.secondInterestMatches;
-               } else if (i == 2) {
+               } else if (var5 == 2) {
                   ++this.thirdInterestMatches;
                }
             }
@@ -53,30 +58,30 @@ public final class StatsTracker {
       }
    }
 
-   public void applySummary(Summary summary, BotState state) {
-      if (summary != null) {
-         state.applySummary(summary.getPoints(), summary.getSpent());
-         double efficiency = summary.getSpent() > 0L ? (double)summary.getPoints() / (double)summary.getSpent() : 0.0D;
+   public void applySummary(Summary var1, BotState var2) {
+      if (var1 != null) {
+         var2.applySummary(var1.getPoints(), var1.getSpent());
+         double var3 = var1.getSpent() > 0L ? (double)var1.getPoints() / (double)var1.getSpent() : (double)0.0F;
          ++this.efficiencySamples;
-         this.averageEfficiency += (efficiency - this.averageEfficiency) / (double)this.efficiencySamples;
-         if (summary.getSpent() == 0L) {
-            state.multiplyAggression(1.15D);
-         } else if (efficiency >= this.averageEfficiency * 1.1D && efficiency > 0.0D) {
-            state.multiplyAggression(1.05D);
-         } else if (efficiency <= this.averageEfficiency * 0.85D) {
-            state.multiplyAggression(0.93D);
+         this.averageEfficiency += (var3 - this.averageEfficiency) / (double)this.efficiencySamples;
+         if (var1.getSpent() == 0L) {
+            var2.multiplyAggression(1.15);
+         } else if (var3 >= this.averageEfficiency * 1.1 && var3 > (double)0.0F) {
+            var2.multiplyAggression(1.05);
+         } else if (var3 <= this.averageEfficiency * 0.85) {
+            var2.multiplyAggression(0.93);
          }
 
       }
    }
 
-   public int getSeenCountForVideoCategory(String category) {
-      return (Integer)this.seenVideoCategories.getOrDefault(category, 0);
+   public int getSeenCountForVideoCategory(String var1) {
+      return (Integer)this.seenVideoCategories.getOrDefault(var1, 0);
    }
 
    public double getRecentWinRate() {
-      int total = this.recentWins + this.recentLosses;
-      return total < 10 ? 0.5D : (double)this.recentWins / (double)total;
+      int var1 = this.recentWins + this.recentLosses;
+      return var1 < 10 ? (double)0.5F : (double)this.recentWins / (double)var1;
    }
 
    public void recordWin() {
@@ -102,5 +107,17 @@ public final class StatsTracker {
 
    public int getRecentWins() {
       return this.recentWins;
+   }
+
+   public void recordWinCost(int var1) {
+      this.avgWinCost += ((double)var1 - this.avgWinCost) / (double)(++this.winSamples);
+   }
+
+   public double getAvgWinCost() {
+      return this.avgWinCost;
+   }
+
+   public int getWinSamples() {
+      return this.winSamples;
    }
 }

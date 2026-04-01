@@ -4,9 +4,9 @@ public class AuctionInput {
    private final Video video;
    private final Viewer viewer;
 
-   public AuctionInput(Video video, Viewer viewer) {
-      this.video = video;
-      this.viewer = viewer;
+   public AuctionInput(Video var1, Viewer var2) {
+      this.video = var1;
+      this.viewer = var2;
    }
 
    public Video getVideo() {

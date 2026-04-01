@@ -4,9 +4,9 @@ public class Summary {
    private final long points;
    private final long spent;
 
-   public Summary(long points, long spent) {
-      this.points = points;
-      this.spent = spent;
+   public Summary(long var1, long var3) {
+      this.points = var1;
+      this.spent = var3;
    }
 
    public long getPoints() {

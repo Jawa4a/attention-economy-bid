@@ -23,72 +23,68 @@ public final class AuctionBot {
    private final ValueEstimator valueEstimator;
    private final BidStrategy bidStrategy;
 
-   public AuctionBot(int initialBudget) {
-      CategoryPicker categoryPicker = new CategoryPicker();
-      String chosenCategory = categoryPicker.chooseCategory();
-      this.state = new BotState(initialBudget, chosenCategory);
+   public AuctionBot(int var1) {
+      CategoryPicker var2 = new CategoryPicker();
+      String var3 = var2.chooseCategory();
+      this.state = new BotState(var1, var3);
       this.parser = new InputParser();
       this.statsTracker = new StatsTracker();
       this.budgetManager = new BudgetManager(this.state);
       this.valueEstimator = new ValueEstimator();
-      this.bidStrategy = new BidStrategy(this.valueEstimator, this.budgetManager, initialBudget);
+      this.bidStrategy = new BidStrategy(this.valueEstimator, this.budgetManager, var1);
    }
 
    public void run() throws IOException {
-      BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-      PrintWriter out = new PrintWriter(System.out, true);
-      out.println(this.state.getChosenCategory());
+      BufferedReader var1 = new BufferedReader(new InputStreamReader(System.in));
+      PrintWriter var2 = new PrintWriter(System.out, true);
+      var2.println(this.state.getChosenCategory());
 
-      while(true) {
-         String line;
-         do {
-            if ((line = reader.readLine()) == null) {
-               return;
-            }
-
-            line = line.trim();
-         } while(line.isEmpty());
-
-         try {
-            this.handleLine(line, out);
-         } catch (Exception var5) {
-            System.err.println("Failed to handle line: " + line);
-            System.err.println("Reason: " + var5.getMessage());
-            if (this.parser.isAuctionLine(line)) {
-               out.println("0 0");
+      String var3;
+      while((var3 = var1.readLine()) != null) {
+         var3 = var3.trim();
+         if (!var3.isEmpty()) {
+            try {
+               this.handleLine(var3, var2);
+            } catch (Exception var5) {
+               System.err.println("Failed to handle line: " + var3);
+               System.err.println("Reason: " + var5.getMessage());
+               if (this.parser.isAuctionLine(var3)) {
+                  var2.println("0 0");
+               }
             }
          }
       }
+
    }
 
-   private void handleLine(String line, PrintWriter out) {
-      if (this.parser.isAuctionLine(line)) {
-         this.handleAuctionLine(line, out);
-      } else if (this.parser.isWinLine(line)) {
-         this.handleWinLine(line);
-      } else if (this.parser.isLossLine(line)) {
+   private void handleLine(String var1, PrintWriter var2) {
+      if (this.parser.isAuctionLine(var1)) {
+         this.handleAuctionLine(var1, var2);
+      } else if (this.parser.isWinLine(var1)) {
+         this.handleWinLine(var1);
+      } else if (this.parser.isLossLine(var1)) {
          this.handleLossLine();
-      } else if (this.parser.isSummaryLine(line)) {
-         this.handleSummaryLine(line);
+      } else if (this.parser.isSummaryLine(var1)) {
+         this.handleSummaryLine(var1);
       } else {
-         System.err.println("Unknown input line ignored: " + line);
+         System.err.println("Unknown input line ignored: " + var1);
       }
    }
 
-   private void handleAuctionLine(String line, PrintWriter out) {
-      AuctionInput input = this.parser.parseAuctionLine(line);
+   private void handleAuctionLine(String var1, PrintWriter var2) {
+      AuctionInput var3 = this.parser.parseAuctionLine(var1);
       this.state.incrementRound();
-      this.state.setLastAuctionCategory(input.getVideo().getCategory());
-      Bid bid = this.bidStrategy.decideBid(input, this.state, this.statsTracker);
-      this.statsTracker.recordAuction(input, this.state.getChosenCategory());
-      Bid safeBid = this.budgetManager.clampToBudget(bid);
-      int var10001 = safeBid.getStartBid();
-      out.println(var10001 + " " + safeBid.getMaxBid());
+      this.state.setLastAuctionCategory(var3.getVideo().getCategory());
+      Bid var4 = this.bidStrategy.decideBid(var3, this.state, this.statsTracker);
+      this.statsTracker.recordAuction(var3, this.state.getChosenCategory());
+      Bid var5 = this.budgetManager.clampToBudget(var4);
+      int var10001 = var5.getStartBid();
+      var2.println(var10001 + " " + var5.getMaxBid());
    }
 
-   private void handleWinLine(String line) {
-      int cost = this.parser.parseWinCost(line);
-      this.state.recordWin(cost);
+   private void handleWinLine(String var1) {
+      int var2 = this.parser.parseWinCost(var1);
+      this.state.recordWin(var2);
       this.statsTracker.recordWin();
    }
 
@@ -97,9 +93,9 @@ public final class AuctionBot {
       this.statsTracker.recordLoss();
    }
 
-   private void handleSummaryLine(String line) {
-      Summary summary = this.parser.parseSummaryLine(line);
-      this.statsTracker.applySummary(summary, this.state);
-      this.bidStrategy.applySummary(summary.getPoints(), summary.getSpent(), this.statsTracker.getRecentWins());
+   private void handleSummaryLine(String var1) {
+      Summary var2 = this.parser.parseSummaryLine(var1);
+      this.statsTracker.applySummary(var2, this.state);
+      this.bidStrategy.applySummary(var2.getPoints(), var2.getSpent(), this.statsTracker.getRecentWins());
    }
 }

@@ -8,3 +8,5 @@ out/
 # Logs
 *.log
 
+# Folders / Files
+copy

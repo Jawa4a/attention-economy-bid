@@ -11,9 +11,9 @@ public final class CategoryPicker {
       this.preferredCategory = (String)CATEGORIES.get((new Random()).nextInt(CATEGORIES.size()));
    }
 
-   public CategoryPicker(String preferredCategory) {
-      if (preferredCategory != null && !preferredCategory.isBlank() && CATEGORIES.contains(preferredCategory)) {
-         this.preferredCategory = preferredCategory;
+   public CategoryPicker(String var1) {
+      if (var1 != null && !var1.isBlank() && CATEGORIES.contains(var1)) {
+         this.preferredCategory = var1;
       } else {
          this.preferredCategory = (String)CATEGORIES.get((new Random()).nextInt(CATEGORIES.size()));
       }

@@ -5,10 +5,10 @@ public class Video {
    private final long viewCount;
    private final long commentCount;
 
-   public Video(String category, long viewCount, long commentCount) {
-      this.category = category;
-      this.viewCount = viewCount;
-      this.commentCount = commentCount;
+   public Video(String var1, long var2, long var4) {
+      this.category = var1;
+      this.viewCount = var2;
+      this.commentCount = var4;
    }
 
    public String getCategory() {
